@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Employee Management</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <style>
+        .employee-card {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+
+        .employee-card:hover {
+            transform: scale(1.05);
+        }
+
+        .employee-img {
+            height: 150px;
+            width: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+    </style>
+</head>
+<body class="container my-5">
+<h1 class="text-center mb-4">Employee Management</h1>
+<div class="d-flex justify-content-between mb-3">
+    <a class="btn btn-primary" th:href="@{/employee/add}">Add New Employee</a>
+</div>
+<div class="row">
+    <div class="col-md-4 mb-4" th:each="employee : ${employees}">
+        <div class="card employee-card text-center">
+            <div class="card-body">
+                <img th:src="${employee.imageUrl != null ? employee.imageUrl : '/images/default-avatar.png'}"
+                     alt="Employee Image"
+                     class="employee-img mb-3">
+                <h5 class="card-title" th:text="${employee.name}"></h5>
+                <p class="card-text text-muted" th:text="${employee.jobTitle}"></p>
+                <p class="card-text" th:text="${employee.email}"></p>
+                <p class="card-text" th:text="${employee.phone}"></p>
+                <div class="d-flex justify-content-center">
+                    <a class="btn btn-warning btn-sm me-2" th:href="@{'/employee/edit/' + ${employee.id}}">Edit</a>
+                    <form th:action="@{/employee/delete/{id}(id=${employee.id})}" method="post" class="d-inline">
+                        <input type="hidden" name="_method" value="delete" />
+                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')">
+                            Delete
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
